@@ -35,6 +35,11 @@ from openai.types.responses import ResponseTextDeltaEvent, ResponseReasoningSumm
 from pageindex import PageIndexClient
 import pageindex.utils as utils
 
+# Non-OpenAI providers only support Chat Completions, not the Responses API.
+if utils._api_base:
+    from agents.models._openai_shared import set_use_responses_by_default
+    set_use_responses_by_default(False)
+
 PDF_URL = "https://arxiv.org/pdf/2603.15031"
 
 _EXAMPLES_DIR = Path(__file__).parent
@@ -183,6 +188,6 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("Step 3: Agent Query (auto tool-use)")
     print("=" * 60)
-    question = "Explain Attention Residuals in simple language."
+    question = "用正體中文，詳細的解釋什麼是Attention Residuals"
     print(f"\nQuestion: '{question}'")
     query_agent(client, doc_id, question, verbose=True)

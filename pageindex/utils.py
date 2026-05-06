@@ -21,6 +21,9 @@ from types import SimpleNamespace as config
 if not os.getenv("OPENAI_API_KEY") and os.getenv("CHATGPT_API_KEY"):
     os.environ["OPENAI_API_KEY"] = os.getenv("CHATGPT_API_KEY")
 
+_api_base = os.getenv("OPENAI_API_BASE")
+if _api_base and not os.getenv("OPENAI_BASE_URL"):
+    os.environ["OPENAI_BASE_URL"] = _api_base
 litellm.drop_params = True
 
 def count_tokens(text, model=None):
@@ -36,11 +39,10 @@ def llm_completion(model, prompt, chat_history=None, return_finish_reason=False)
     messages = list(chat_history) + [{"role": "user", "content": prompt}] if chat_history else [{"role": "user", "content": prompt}]
     for i in range(max_retries):
         try:
-            response = litellm.completion(
-                model=model,
-                messages=messages,
-                temperature=0,
-            )
+            kwargs = dict(model=model, messages=messages, temperature=0)
+            if _api_base:
+                kwargs["api_base"] = _api_base
+            response = litellm.completion(**kwargs)
             content = response.choices[0].message.content
             if return_finish_reason:
                 finish_reason = "max_output_reached" if response.choices[0].finish_reason == "length" else "finished"
@@ -66,11 +68,10 @@ async def llm_acompletion(model, prompt):
     messages = [{"role": "user", "content": prompt}]
     for i in range(max_retries):
         try:
-            response = await litellm.acompletion(
-                model=model,
-                messages=messages,
-                temperature=0,
-            )
+            kwargs = dict(model=model, messages=messages, temperature=0)
+            if _api_base:
+                kwargs["api_base"] = _api_base
+            response = await litellm.acompletion(**kwargs)
             return response.choices[0].message.content
         except Exception as e:
             print('************* Retrying *************')

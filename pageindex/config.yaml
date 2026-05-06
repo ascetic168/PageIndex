@@ -1,6 +1,16 @@
-model: "gpt-4o-2024-11-20"
+# --- Model ---
+# 智譜 (Zhipu) via OpenAI-compatible endpoint (requires OPENAI_API_BASE in .env)
+model: "openai/glm-4-flash"
+retrieve_model: "openai/glm-4-flash"  # defaults to `model` if not set
+
+# OpenAI defaults:
+# model: "gpt-4o-2024-11-20"
+# retrieve_model: "gpt-5.4"
+
+# Anthropic:
 # model: "anthropic/claude-sonnet-4-6"
-retrieve_model: "gpt-5.4"  # defaults to `model` if not set
+
+# --- Indexing options ---
 toc_check_page_num: 20
 max_page_num_each_node: 10
 max_token_num_each_node: 20000
