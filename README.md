@@ -26,6 +26,7 @@
   
 </div>
 
+> **Fork of [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex)** — This fork adds support for **OpenAI-compatible LLM providers** (e.g. [智譜 Zhipu](https://open.bigmodel.cn/)) in addition to OpenAI and Anthropic. Configure via `OPENAI_API_BASE` in `.env` — see [`.env.example`](.env.example) for details.
 
 <details open>
 <summary><h2>📢 Updates</h2></summary>
