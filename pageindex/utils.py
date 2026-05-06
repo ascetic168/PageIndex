@@ -670,7 +670,7 @@ class ConfigLoader:
 
     def load(self, user_opt=None) -> config:
         """
-        Load the configuration, merging user options with default values.
+        Load the configuration with priority: user_opt > env vars > config.yaml.
         """
         if user_opt is None:
             user_dict = {}
@@ -682,7 +682,14 @@ class ConfigLoader:
             raise TypeError("user_opt must be dict, config(SimpleNamespace) or None")
 
         self._validate_keys(user_dict)
-        merged = {**self._default_dict, **user_dict}
+
+        env_overrides = {}
+        if os.getenv("PAGEINDEX_MODEL"):
+            env_overrides["model"] = os.getenv("PAGEINDEX_MODEL")
+        if os.getenv("PAGEINDEX_RETRIEVE_MODEL"):
+            env_overrides["retrieve_model"] = os.getenv("PAGEINDEX_RETRIEVE_MODEL")
+
+        merged = {**self._default_dict, **env_overrides, **user_dict}
         return config(**merged)
 
 def create_node_mapping(tree):

@@ -12,6 +12,7 @@ if __name__ == "__main__":
     parser.add_argument('--md_path', type=str, help='Path to the Markdown file')
 
     parser.add_argument('--model', type=str, default=None, help='Model to use (overrides config.yaml)')
+    parser.add_argument('--retrieve-model', type=str, default=None, help='Retrieve model to use (overrides config.yaml)')
 
     parser.add_argument('--toc-check-pages', type=int, default=None,
                       help='Number of pages to check for table of contents (PDF only)')
@@ -54,6 +55,7 @@ if __name__ == "__main__":
         # Process PDF file
         user_opt = {
             'model': args.model,
+            'retrieve_model': args.retrieve_model,
             'toc_check_page_num': args.toc_check_pages,
             'max_page_num_each_node': args.max_pages_per_node,
             'max_token_num_each_node': args.max_tokens_per_node,
@@ -99,6 +101,7 @@ if __name__ == "__main__":
         # Create options dict with user args
         user_opt = {
             'model': args.model,
+            'retrieve_model': args.retrieve_model,
             'if_add_node_summary': args.if_add_node_summary,
             'if_add_doc_description': args.if_add_doc_description,
             'if_add_node_text': args.if_add_node_text,
